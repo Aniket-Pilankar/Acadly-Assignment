@@ -1,7 +1,8 @@
-import { ALL_STUDENTS ,allStudent } from "./action"
+import { ALL_STUDENTS ,allStudent,INDIVIDUAL_STUDENTS,individualStudent } from "./action"
 
 const initState = {
-    studentlist:[]
+    studentlist:[],
+    individual_Student:{}
 }
 
 export const allStudentReducer = (store=initState, {type,payload}:{type:string,payload:any}) => {
@@ -9,6 +10,9 @@ export const allStudentReducer = (store=initState, {type,payload}:{type:string,p
         case ALL_STUDENTS:
             return {...store,studentlist:[...store.studentlist,...payload]}
         
+        case INDIVIDUAL_STUDENTS:
+            return {...store,individual_Student:payload}
+
             default:
                 return store
     }
