@@ -2,6 +2,9 @@ import React,{ useEffect, useState } from 'react'
 import InfiniteScroll from 'react-infinite-scroll-component';
 import axios from 'axios';
 import styled from 'styled-components'
+import { useDispatch } from 'react-redux';
+import { allStudent } from '../Redux/InfiniteScroll/action';
+import { useSelector } from 'react-redux';
 const StyledTable = styled.table`
   caption-side: top;
   border: none;
@@ -62,6 +65,9 @@ const InfiniteScrollList:React.FC = () => {
     const [items, setItems] = useState<any[]>([]);//** */
     const [noMore,setMore] = useState<boolean>(true)
     const [page,setPage] = useState<number>(2)
+    const dispatch = useDispatch()
+    const allstudent_from_store = useSelector((store:any) => store.allstudents.studentlist)
+    console.log('allstudent_from_store:', allstudent_from_store)
     console.log('items:', items)
 
     useEffect(() => {
@@ -72,22 +78,15 @@ const InfiniteScrollList:React.FC = () => {
         const res = await axios.get(`http://localhost:3004/students?_page=1&_limit=20`);
         console.log('res:', res)
         setItems(res.data)
-        // const data = await res.json()
-        // console.log('data:', data)
+        dispatch(allStudent(res.data))
     }
 
-    // const getStudentData = () => {
-    //     axios.get(`http://localhost:3004/students?_page=2&_limit=20`).then((res) => {
-    //         console.log('res:', res)
-
-    //     })
-    // }
 
     const fetchData = async() => {
         const res = await axios.get(`http://localhost:3004/students?_page=${page}&_limit=20`);
         console.log('res1:', res)
         setItems([...items,...res.data])
-
+        dispatch(allStudent(res.data))
         let {data} = res
         console.log('data:', data)
         if(data.length === 0 || data.length < 20){
@@ -100,7 +99,7 @@ const InfiniteScrollList:React.FC = () => {
   return (
     <div>
                   <InfiniteScroll
-                dataLength={items.length} //This is important field to render the next data
+                dataLength={allstudent_from_store.length} //This is important field to render the next data
                 next={fetchData}
                 hasMore={noMore}
                 loader={<h4>Loading...</h4>}
@@ -141,7 +140,7 @@ const InfiniteScrollList:React.FC = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {items.map((e) => (
+                        {allstudent_from_store.map((e:any) => (
                     <tr key={e.id}>
                         <td>{e.id}</td>
                         <td>{e.name}</td>
