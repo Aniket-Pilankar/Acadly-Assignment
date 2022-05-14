@@ -1,6 +1,6 @@
 # Acadly-Assignment
 
-##Tech Stack
+## Tech Stack
 - TypeScript
 - React
 - Redux
