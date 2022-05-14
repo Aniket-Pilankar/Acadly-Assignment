@@ -1,5 +1,6 @@
 export const ALL_STUDENTS = "ALL_STUDENTS"
 export const INDIVIDUAL_STUDENTS = "INDIVIDUAL_STUDENTS"
+// export const INDIVIDUAL_STUDENTS_SEARCH = "INDIVIDUAL_STUDENTS_SEARCH"
 
 interface Iabc{
     id:number
@@ -46,3 +47,7 @@ export const individualStudent = (data:IindivaidualStudent) => ({
     type: INDIVIDUAL_STUDENTS,
     payload:data
 })
+// export const individualStudentSearch = (data:IindivaidualStudent) => ({
+//     type: INDIVIDUAL_STUDENTS,
+//     payload:data
+// })
