@@ -13,8 +13,7 @@ export const allStudentReducer = (store=initState, {type,payload}:{type:string,p
         case INDIVIDUAL_STUDENTS:
             return {...store,individual_Student:payload}
 
-        // case INDIVIDUAL_STUDENTS_SEARCH:
-        //     return {...store,studentlist:[...store.studentlist,...payload]}
+
             default:
                 return store
     }

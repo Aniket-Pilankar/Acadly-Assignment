@@ -10,11 +10,6 @@ export const CenterH = css`
   justify-content: center;
 `;
 
-export const CenterVH = css`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
 
 export const Center = styled.div`
   /* This is an example of a nested interpolation */

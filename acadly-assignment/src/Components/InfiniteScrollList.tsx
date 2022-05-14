@@ -5,6 +5,8 @@ import styled from 'styled-components'
 import { useDispatch } from 'react-redux';
 import { allStudent, individualStudent } from '../Redux/InfiniteScroll/action';
 import { useSelector } from 'react-redux';
+
+// TABLE DIV
 const StyledTable = styled.table`
   caption-side: top;
   border: none;
@@ -41,18 +43,20 @@ const StyledTable = styled.table`
   }
 `;
 
+// PARENT DIV
 const Container = styled.div`
   border: 10px solid red;
   display: flex;
   justify-content: space-between;
 `
+// SELECTED STUDENT TABLE DIV (RIGHT MOST TABLE)
 const FixedTable = styled.div`
   border:5px solid blue;
   width:50%;
   position:fixed;
   right: 0;
   `
-
+// INPUT ELEMENT
 const Input = styled.input`
 font-size: 18px;
 padding: 10px;
@@ -66,29 +70,30 @@ border-radius: 3px;
 }
 `;
   
-
+// INFINITE-SCROLLING COMPONENT
 const InfiniteScrollList: React.FC = () => {
-  const [items, setItems] = useState<any[]>([]);//** */
+  
+  // const [items, setItems] = useState<any[]>([]);  TO STORE STUDENT LIST(JUST CREATED FOR FLOW) , INSTEAD OF HOOK WE STORE THE STUCENT LIST IN STORE(REDUX)
   const [noMore, setMore] = useState<boolean>(true)
-  const [page, setPage] = useState<number>(2)
-  const [dialogShow, setDialogShow] = useState<boolean>(false)
-  const [searchText,setSearchText] = useState<string>("")
+  const [page, setPage] = useState<number>(2) //SETPAGE NUMBER
+  const [dialogShow, setDialogShow] = useState<boolean>(false) // IF NO ITEM IS SELECTED THEN SHOW STATEMENT OR THEIR DETAILS
+  const [searchText,setSearchText] = useState<string>("") // FOR STOING INPUT TEXT
   
   
-  const dispatch = useDispatch()
-  const allstudent_from_store = useSelector((store: any) => store.allstudents.studentlist)
-  const individual_student_from_store = useSelector((store: any) => store.allstudents.individual_Student)
-  console.log('individual_student_from_store:', individual_student_from_store)
-  console.log('allstudent_from_store:', allstudent_from_store)
-  console.log('items:', items)
+  const dispatch = useDispatch() 
+  const allstudent_from_store = useSelector((store: any) => store.allstudents.studentlist) //GOT STUDENT LIST FROM REDUX STORE
+  const individual_student_from_store = useSelector((store: any) => store.allstudents.individual_Student)//GOT INDIVIDUAL STUDENT DETAILS FROM REDUX STORE
+  // console.log('individual_student_from_store:', individual_student_from_store)
+  // console.log('allstudent_from_store:', allstudent_from_store)
+  // console.log('items:', items)
   
   useEffect(() => {
     getStudentData()
     
-  }, [])
+  }, []) // TO GET THE GETSTUDENTDATA ONLY ONCE WHEN THE COMPONENT IS MOUNTED
 
 
-
+  // GET STUDENT LIST FROM JSON-SERVER DATA BASE 20 STUDENTS
   const getStudentData = async () => {
     // while(allstudent_from_store.length > 0){
       //   allstudent_from_store.pop()
@@ -96,15 +101,16 @@ const InfiniteScrollList: React.FC = () => {
       // dispatch(allStudent(allstudent_from_store))
       const res = await axios.get(`http://localhost:3004/students?_page=1&_limit=20`);
       console.log('res:', res)
-      setItems(res.data)
+      // setItems(res.data)
     dispatch(allStudent(res.data))
   }
 
+  // GET MORE STUDENT DETAILS AS THE PAGE IS SCOLLED DOWN
 
   const fetchData = async () => {
     const res = await axios.get(`http://localhost:3004/students?_page=${page}&_limit=20`);
     console.log('res1:', res)
-    setItems([...items, ...res.data])
+    // setItems([...items, ...res.data])
     dispatch(allStudent(res.data))
     let { data } = res
     console.log('data:', data)
@@ -115,7 +121,7 @@ const InfiniteScrollList: React.FC = () => {
     setPage(page + 1)
     // console.log("object");
   }
-  // style={{ display: 'flex' }}
+
   
   // const handle_Search_Data = (e:any) => {****
   //   console.log(e.target.value)
@@ -124,7 +130,7 @@ const InfiniteScrollList: React.FC = () => {
   
   const handle_Search_Data = (e:any) => {
     // .filter((val:any) => {
-      //   if(searchText === ""){
+      //   if(searchText === ""){ //                         ANOTHER WAY TO FILTER BUT ONLY FILTERING FROM FIRST 20 LIST
         //     return val
         //   }else if(val.name.toLowerCase().includes(searchText.toLocaleLowerCase())){
     //     return val
@@ -144,10 +150,10 @@ const InfiniteScrollList: React.FC = () => {
     setSearchText(e.target.value)
     if(searchText.length >= 2){
     setPage(1)
-    while(allstudent_from_store.length > 0){
+    while(allstudent_from_store.length > 0){  //  WHILE SEARCHING THE PREVIOUS DATA FROM THE STORE SHOULD BE REMOVED SO THAT SEARCHED DATA CAN BE SEEN ON THE TOP
       allstudent_from_store.pop()
     }
-    dispatch(allStudent(allstudent_from_store))
+    dispatch(allStudent(allstudent_from_store)) 
     axios.get(`http://localhost:3004/students?q=${searchText}`).then(({data}) => {
       console.log('data:', data)
       
@@ -174,16 +180,7 @@ const InfiniteScrollList: React.FC = () => {
             <b>Yay! You have seen it all</b>
           </p>
         }
-      // // below props only if you need pull down functionality
-      // refreshFunction={this.refresh}
-      // pullDownToRefresh
-      // pullDownToRefreshThreshold={50}
-      // pullDownToRefreshContent={
-      //     <h3 style={{ textAlign: 'center' }}>&#8595; Pull down to refresh</h3>
-      // }
-      // releaseToRefreshContent={
-      //     <h3 style={{ textAlign: 'center' }}>&#8593; Release to refresh</h3>
-      // }
+
       >
         <StyledTable>
           <thead>
@@ -221,7 +218,7 @@ const InfiniteScrollList: React.FC = () => {
             // .filter((val:any) => {
             //   if(searchText === ""){
             //     return val
-            //   }else if(val.name.toLowerCase().includes(searchText.toLocaleLowerCase())){
+            //   }else if(val.name.toLowerCase().includes(searchText.toLocaleLowerCase())){  // ANOTHER WAY TO FILTER BUT ONLY FILTERING FROM FIRST 20 LIST
             //     return val
             //   }
             // })

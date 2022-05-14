@@ -1,0 +1,7 @@
+On first terminal (for frontend react-typescript);
+
+npm start 
+
+on second terminal (for backend (JSON-SERVER))
+
+json-server --watch db.json --port 3004
